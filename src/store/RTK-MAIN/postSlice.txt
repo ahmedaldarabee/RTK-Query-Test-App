@@ -1,0 +1,48 @@
+const initialState = {
+    records: [],
+    error:false,
+    loading:false
+}
+
+// Action We can set it in main component or here in main slice [ Generic Note ! ]
+export const fetchPostData = createAsyncThunk("postSlices/fetchPosts",async (_,thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
+    try {
+
+        const req = await fetch("http://localhost:5000/posts");
+        const data = await req.json();
+        return data; // here be as a action.payload
+
+    } catch (error) {
+        return rejectWithValue(error.message);
+    }
+});
+
+const postSliceHandler = createSlice({
+    name:"postSlices", // name must be popular +s and must be matched with create async thunk name 
+    initialState,
+    reducers:{},
+    extraReducers:{
+        // fetch post [ GET ] - also we can using builder way with add case [ Recommended way ! ]
+        [fetchPostData.pending]:(state,action) =>{
+            state.loading = true;
+            state.error = null;
+        },
+        [fetchPostData.fulfilled]:(state,action) =>{ // here the data is exist !
+            state.loading = false;
+            state.records = action.payload;
+        },
+         [fetchPostData.rejected]:(state,action) =>{
+            state.loading = false;
+            state.error = action.payload;
+        }
+
+        // post [ POST / Create ]
+       
+       
+        // post [ Delete ]
+        
+    },
+})
+
+export default postSliceHandler.reducer;

@@ -1,0 +1,33 @@
+const router = createBrowserRouter([
+  {
+    path:"/",
+    element:<RootLayout />,
+    errorElement:<ErrorPage/>,
+    children:[
+      {index: true,element:<Index/>},
+      {path:"/add",element: <Add />},
+      {path:":id/edit",element: <Edit />},
+      {
+        path:":id",
+        element: <Details />,
+        // loading function: that work before Details component uploaded
+        loader: ({params}) => {
+          if(isNaN(params.id)){
+            throw new Response("Bad Request",{
+              statusText:"send corrected data!",
+              status:400
+            });
+          }
+        }
+      },
+    ]
+  }
+]);
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(
+  <Provider store={store}>
+    <RouterProvider router={router}/>
+  </Provider>
+);

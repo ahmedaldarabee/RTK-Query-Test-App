@@ -1,0 +1,8 @@
+const store = configureStore({
+    reducer:{
+        // to access post state by use selector : state.post
+        post: postSliceHandler
+    }
+})
+
+export default store;

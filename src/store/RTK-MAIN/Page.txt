@@ -1,0 +1,19 @@
+const Index = () => {
+  const dispatch = useDispatch();
+  // de-structure: extract data from object
+  const { records, loading, error } = useSelector(state => state.post);
+
+  useEffect(() => {
+    dispatch(fetchPostData());
+  },[dispatch]);
+
+  return (
+    <PostList
+      data={records}
+      loading={loading}
+      error={error}
+    />
+  )
+}
+
+export default Index
